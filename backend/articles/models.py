@@ -1,3 +1,24 @@
 from django.db import models
 
-# Create your models here.
+class Category(models.Model):
+    tipo = models.CharField(max_length=50)
+    descricao_meta = models.CharField(max_length=200)
+
+
+class Author(models.Model):
+    nome = models.CharField(max_length=70) #https://webarchive.nationalarchives.gov.uk/ukgwa/+/http://www.cabinetoffice.gov.uk/media/254290/GDS%20Catalogue%20Vol%202.pdf
+    profissao = models.CharField(max_length=50)
+
+class Article(models.Model):
+    autor = models.ForeignKey(Author, on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=60) # length definition based on: https://zyppy.com/title-tags/meta-title-tag-length/
+    subtitulo = models.CharField(max_length=120) # also useful source for subheading and overall structure: https://espirian.co.uk/headline-subheading-meta/
+    descricao_meta = models.CharField(max_length=160)
+    conteudo = models.TextField()
+    data = models.DateTimeField("date published")
+    imagem_capa = models.ImageField(upload_to='artigos/')
+    categoria = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+class ArticleImage(models.Model):
+    artigo = models.ForeignKey(Article, on_delete=models.CASCADE)
+    imagem = models.ImageField(upload_to='artigos/galeria/')
