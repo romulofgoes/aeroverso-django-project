@@ -9,6 +9,9 @@ class Author(models.Model):
     nome = models.CharField(max_length=70) #https://webarchive.nationalarchives.gov.uk/ukgwa/+/http://www.cabinetoffice.gov.uk/media/254290/GDS%20Catalogue%20Vol%202.pdf
     profissao = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.nome
+
 class Article(models.Model):
     autor = models.ForeignKey(Author, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=60) # length definition based on: https://zyppy.com/title-tags/meta-title-tag-length/
@@ -18,6 +21,9 @@ class Article(models.Model):
     data = models.DateTimeField("date published")
     imagem_capa = models.ImageField(upload_to='artigos/')
     categoria = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+            return self.titulo
 
 class ArticleImage(models.Model):
     artigo = models.ForeignKey(Article, on_delete=models.CASCADE)
