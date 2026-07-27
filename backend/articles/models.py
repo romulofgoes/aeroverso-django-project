@@ -19,7 +19,7 @@ class Article(models.Model):
     descricao_meta = models.CharField(max_length=160)
     conteudo = models.TextField()
     data = models.DateTimeField("date published")
-    imagem_capa = models.ImageField(upload_to='artigos/')
+    imagem_capa = models.ImageField(blank=True, upload_to='media/')
     categoria = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -27,4 +27,4 @@ class Article(models.Model):
 
 class ArticleImage(models.Model):
     artigo = models.ForeignKey(Article, on_delete=models.CASCADE)
-    imagem = models.ImageField(upload_to='artigos/galeria/')
+    imagem = models.ImageField(upload_to='media/galeria/')

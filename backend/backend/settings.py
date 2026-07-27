@@ -136,3 +136,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# caminho de imagens colocadas no artigo
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
