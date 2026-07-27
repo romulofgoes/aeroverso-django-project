@@ -1,17 +1,14 @@
 import { articleService } from '@/services/articleService'
 import { Article } from '@/types/index'
 
-export default async function Home() {
-    const articles = await articleService.getArticles(1);
+export default async function Page() {
+    const articles = await articleService.getArticles()
     console.log(articles)
     return (
         <ul>
         {articles.results.map((article: Article) => (
             <li key={article.id}>
-            <h1>{article.titulo}</h1>
-            <img src={article.imagem_capa} alt=""/>
-            <h2>{article.subtitulo}</h2>
-            <p>{article.conteudo}</p>
+            <h1>{article.autor.nome}</h1>
             </li>
         ))}
         </ul>
