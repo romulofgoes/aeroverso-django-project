@@ -5,7 +5,7 @@ from articles.views import *
 app_name = "articles"
 
 router = DefaultRouter(trailing_slash=False)
-router.register(r"articles", ArticleViewSet)
+router.register(r"articles", ArticleViewSet, basename="article")
 router.register(r"categories", CategoryViewSet)
 router.register(r"authors", AuthorViewSet)
 

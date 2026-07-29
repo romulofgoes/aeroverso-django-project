@@ -9,14 +9,22 @@ class PublicReadViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticated()]
     
 class ArticleViewSet(PublicReadViewSet):
-    queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+    def get_queryset(self):
+        queryset = Article.objects.all()
+        categoria_id = self.request.query_params.get('categoria')
+        autor_id = self.request.query_params.get('autor')
+        if categoria_id:
+            queryset = queryset.filter(categoria_id=categoria_id)
+        if autor_id:
+            queryset = queryset.filter(autor_id=autor_id)
+        return queryset
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(PublicReadViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-class AuthorViewSet(viewsets.ModelViewSet):
+class AuthorViewSet(PublicReadViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 

@@ -13,6 +13,8 @@ class Author(models.Model):
         return self.nome
 
 class Article(models.Model):
+    class Meta:
+        ordering = ['-data']  # artigos mais recentes primeiro, sempre
     autor = models.ForeignKey(Author, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=60) # length definition based on: https://zyppy.com/title-tags/meta-title-tag-length/
     subtitulo = models.CharField(max_length=120) # also useful source for subheading and overall structure: https://espirian.co.uk/headline-subheading-meta/
