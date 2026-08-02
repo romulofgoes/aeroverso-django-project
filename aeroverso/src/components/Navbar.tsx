@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
     <nav className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
       <Link href="/" className="flex items-center gap-2 group">
-        <Logo className="w-7 h-7 text-cyan-glow" />
+        <Logo className="w-2 h-2 text-cyan-glow" />
         <span className="font-display text-lg font-bold tracking-tight group-hover:text-cyan-glow transition-colors">
           Aeroverso
         </span>

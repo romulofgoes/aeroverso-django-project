@@ -7,9 +7,9 @@ export default function FeaturedArticle({ article }: { article: Article }) {
   return (
     <div className="mb-12">
       <Link href={`/articles/${article.id}`} className="block group">
-        <div className="relative w-full aspect-[21/9] rounded-lg overflow-hidden mb-4">
+        <div className="relative w-full aspect-21/9 rounded-lg overflow-hidden mb-4">
           <Image
-            src={article.imagem_capa}
+            src={article.imagem_capa || '/file.svg'}
             alt={article.titulo}
             fill
             priority

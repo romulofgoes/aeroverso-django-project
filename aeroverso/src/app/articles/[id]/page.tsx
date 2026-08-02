@@ -42,7 +42,7 @@ export default async function Page(
             {/* Imagem de capa — aspect-video mantém proporção 16:9 responsiva */}
         <div className="relative w-full aspect-video mb-10 rounded-lg overflow-hidden border border-navy-700">
             <Image
-            src={article.imagem_capa}
+            src={article.imagem_capa || "/file.svg"}
             alt={article.titulo}
             fill
             className="object-cover"

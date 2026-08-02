@@ -1,4 +1,5 @@
-import type {Article, DjangoList} from "@/types";
+import type {Article, ArticleRequestDTO, DjangoList, PatchArticle} from "@/types";
+import { tokenService } from "./tokenService";
 
 const BASE_URL = "http://localhost:8000/articles/articles"; //endpoint no django REST framework
 
@@ -21,4 +22,48 @@ export const articleService = {
     if (!res.ok) throw new Error(`Erro ao buscar o artigo com id=${id}`)
     return res.json()
   },
+
+  postArticle: async (dto: ArticleRequestDTO, token:string): Promise<Article> => {
+    const body = new FormData()
+    body.append('titulo', dto.titulo)
+    body.append('subtitulo', dto.subtitulo)
+    body.append('descricao_meta', dto.descricao_meta)
+    body.append('categoria', dto.categoria)
+    body.append('conteudo', dto.conteudo)
+    body.append('autor', dto.autor)
+    body.append('data', dto.data)
+    if(dto.imagem_capa) body.append('imagem_capa', dto.imagem_capa)
+    const res = await fetch(`${BASE_URL}`, {
+      method: "POST", 
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body,
+    });
+    if(!res.ok) {
+      const errMsg = await res.text();
+      throw new Error(errMsg || `Erro ao criar o artigo ${dto.titulo}`);
+    }
+    return res.json();
+  },
+  updateArticle: async (id: string, article:PatchArticle, token:string): Promise<Article> => {
+    const body = new FormData();
+    Object.entries(article).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        body.append(key, value as string | Blob);
+      }
+    });
+    const res = await fetch(`${BASE_URL}/${id}`, {
+      method:"PATCH",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body
+    });
+    if(!res.ok){
+      const errMsg = await res.text();
+      throw new Error(errMsg || `Erro ao criar o artigo ${id}`);
+    }
+    return res.json();
+  }
 }

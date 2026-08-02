@@ -1,9 +1,9 @@
 @import "tailwindcss";
-
+/*
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
+}*/
 
 @theme {
   /* Paleta "Space Navy" — tons de azul-marinho bem escuro, do mais profundo ao mais claro */
@@ -13,20 +13,21 @@
   --color-navy-700: #1c2740;
 
   /* Ciano de destaque — usado só em pontos de ênfase (categoria, links, ícones) */
-  --color-cyan-glow: #22d3ee;
+  --color-cyan-glow: rgba(59, 130, 246);
 
   /* Conecta os tokens de fonte do Tailwind às variáveis carregadas pelo next/font no layout.tsx */
   --font-display: var(--font-space-grotesk), sans-serif;
   --font-body: var(--font-inter), sans-serif;
+
+
 }
 /*
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}*/
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -35,8 +36,9 @@
   }
 }
 
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-}
+}*/
