@@ -17,10 +17,21 @@ class ArticleImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ArticleSerializer(serializers.ModelSerializer):
-    categoria = CategorySerializer(read_only=True)
-    autor = AuthorSerializer(read_only=True)
+    # FIX: categoria/autor were read_only nested serializers, so POST/PUT could
+    # never write them (frontend sends just the id). Now writable via PK...
+    categoria = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    autor = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all())
+    imagem_capa = serializers.ImageField(required=False)
     imagens = ArticleImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Article
         fields = "__all__"
+
+    # FIX: ...while GET responses still return the full nested Category/Author
+    # objects, since ArticleCard/CategoryLink/article detail page expect that shape.
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['categoria'] = CategorySerializer(instance.categoria).data
+        representation['autor'] = AuthorSerializer(instance.autor).data
+        return representation
