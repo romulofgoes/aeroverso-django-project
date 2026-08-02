@@ -3,6 +3,8 @@ from django.db import models
 class Category(models.Model):
     tipo = models.CharField(max_length=50)
     descricao_meta = models.CharField(max_length=200)
+    def __str__(self):
+        return self.tipo
 
 
 class Author(models.Model):
@@ -21,7 +23,7 @@ class Article(models.Model):
     descricao_meta = models.CharField(max_length=160)
     conteudo = models.TextField()
     data = models.DateTimeField("date published")
-    imagem_capa = models.ImageField(blank=True, upload_to='media/')
+    imagem_capa = models.ImageField(blank=True, null=True, upload_to='images/')
     categoria = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
