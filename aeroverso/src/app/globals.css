@@ -5,12 +5,28 @@
   --foreground: #171717;
 }
 
+@theme {
+  /* Paleta "Space Navy" — tons de azul-marinho bem escuro, do mais profundo ao mais claro */
+  --color-navy-950: #0a0e1a;
+  --color-navy-900: #0f1729;
+  --color-navy-800: #131c30;
+  --color-navy-700: #1c2740;
+
+  /* Ciano de destaque — usado só em pontos de ênfase (categoria, links, ícones) */
+  --color-cyan-glow: #22d3ee;
+
+  /* Conecta os tokens de fonte do Tailwind às variáveis carregadas pelo next/font no layout.tsx */
+  --font-display: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+}
+/*
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
+}*/
 
 @media (prefers-color-scheme: dark) {
   :root {

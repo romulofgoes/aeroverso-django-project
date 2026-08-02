@@ -8,7 +8,7 @@ export default async function Page() {
         <ul>
         {articles.results.map((article: Article) => (
             <li key={article.id}>
-            <h1>{article.autor.nome}</h1>
+            <h1>{article.imagem_capa}</h1>
             </li>
         ))}
         </ul>
