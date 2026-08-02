@@ -1,6 +1,6 @@
 import { Author, AuthorRequestDTO, DjangoList, PatchAuthor } from '@/types/index'
 
-const BASE_URL = `http://localhost:8000/articles/authors`
+const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/authors`
 
 export const authorService = {
   getAuthors: async (): Promise<DjangoList<Author>> => {

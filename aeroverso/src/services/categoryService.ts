@@ -1,6 +1,6 @@
 import { Category, CategoryRequestDTO, DjangoList, PatchCategory } from '@/types/index'
 
-const BASE_URL = `http://localhost:8000/articles/categories`;
+const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/categories`;
 
 export const categoryService = {
   getCategories: async (): Promise<DjangoList<Category>> => {

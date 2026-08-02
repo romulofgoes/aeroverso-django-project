@@ -1,7 +1,8 @@
 import type {Article, ArticleRequestDTO, DjangoList, PatchArticle} from "@/types";
 import { tokenService } from "./tokenService";
 
-const BASE_URL = "http://localhost:8000/articles/articles"; //endpoint no django REST framework
+
+const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/articles` //endpoint no django REST framework
 
 export const articleService = {
   getArticles: async (
