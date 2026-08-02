@@ -159,5 +159,4 @@ JWT_AUTH = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",      # Typical React/Vue/Next.js dev server
     "http://127.0.0.1:3000",
-    "https://yourfrontend.com",   # Your actual live website domain
 ]
