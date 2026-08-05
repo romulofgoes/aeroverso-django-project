@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
     'articles',
 ]
 
@@ -144,16 +145,13 @@ STATIC_URL = 'static/'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-JWT_AUTH = {
-    # how long the original token is valid for
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=15),
-
-    # allow refreshing of tokens
-    'JWT_ALLOW_REFRESH': True,
+SIMPLE_JWT = {
+    # how long the access token is valid for
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=15),
 
     # this is the maximum time AFTER the token was issued that
-    # it can be refreshed.  exprired tokens can't be refreshed.
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    # it can be used to get a new access token
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=7),
 }
 
 CORS_ALLOWED_ORIGINS = [
