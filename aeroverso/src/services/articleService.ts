@@ -1,5 +1,6 @@
 import type {Article, ArticleRequestDTO, DjangoList, PatchArticle} from "@/types";
 import { tokenService } from "./tokenService";
+import { apiClient } from "@/lib/apiClient";
 
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/articles` //endpoint no django REST framework
@@ -24,7 +25,7 @@ export const articleService = {
     return res.json()
   },
 
-  postArticle: async (dto: ArticleRequestDTO, token:string): Promise<Article> => {
+  postArticle: async (dto: ArticleRequestDTO) => {
     const body = new FormData()
     body.append('titulo', dto.titulo)
     body.append('subtitulo', dto.subtitulo)
@@ -34,37 +35,21 @@ export const articleService = {
     body.append('autor', dto.autor)
     body.append('data', dto.data)
     if(dto.imagem_capa) body.append('imagem_capa', dto.imagem_capa)
-    const res = await fetch(`${BASE_URL}`, {
+    await apiClient.request(`${BASE_URL}`, {
       method: "POST", 
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
       body,
     });
-    if(!res.ok) {
-      const errMsg = await res.text();
-      throw new Error(errMsg || `Erro ao criar o artigo ${dto.titulo}`);
-    }
-    return res.json();
   },
-  updateArticle: async (id: string, article:PatchArticle, token:string): Promise<Article> => {
+  updateArticle: async (id: string, article:PatchArticle) => {
     const body = new FormData();
     Object.entries(article).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         body.append(key, value as string | Blob);
       }
     });
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    await apiClient.request(`${BASE_URL}/${id}`, {
       method:"PATCH",
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
       body
     });
-    if(!res.ok){
-      const errMsg = await res.text();
-      throw new Error(errMsg || `Erro ao criar o artigo ${id}`);
-    }
-    return res.json();
   }
 }

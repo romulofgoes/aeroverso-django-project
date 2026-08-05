@@ -18,14 +18,7 @@ export default function EditCategory({ category }: { category: Category }) {
     const token = localStorage.getItem('access_token')
     const patchData: PatchCategory = { tipo, descricao_meta: descricaoMeta }
     try {
-      try {
-        await categoryService.updateCategory(String(category.id), token || "a", patchData)
-      } catch (err) {
-        const tokenRef = localStorage.getItem('refresh_token')
-        if (!tokenRef) throw new Error("Não foi possível achar o refresh token no localStorage")
-        const newToken = (await tokenService.getNewToken(tokenRef)).access || "a"
-        await categoryService.updateCategory(String(category.id), newToken, patchData)
-      }
+      await categoryService.updateCategory(String(category.id), patchData)
       router.push('/admin/management/dashboard/categories/edit')
     } catch (err) {
       console.log(err || "Não foi possível salvar as alterações")

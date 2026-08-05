@@ -1,3 +1,4 @@
+import { apiClient } from '@/lib/apiClient';
 import { Category, CategoryRequestDTO, DjangoList, PatchCategory } from '@/types/index'
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/categories`;
@@ -13,40 +14,25 @@ export const categoryService = {
     if (!res.ok) throw new Error(`Erro ao buscar categoria com id=${id}`);
     return res.json();
   },
-  postCategory: async (newCategory:CategoryRequestDTO, token:string): Promise<Category> => {
+  postCategory: async (newCategory:CategoryRequestDTO) => {
     const body = new FormData();
     body.append('tipo', newCategory.tipo);
     body.append('descricao_meta', newCategory.descricao_meta);
-    const res = await fetch(`${BASE_URL}`, {
+    await apiClient.request(`${BASE_URL}`, {
       method:"POST",
-      headers:{
-        'Authorization':`Bearer ${token}`
-      },
       body
     });
-    if(!res.ok){
-      throw new Error("Problema ao enviar dados da nova categoria criada.");
-    }
-    return res.json();
   },
-  updateCategory: async (id: string, token:string, category:PatchCategory): Promise<Category> => {
+  updateCategory: async (id: string, category:PatchCategory) => {
       const body = new FormData();
       Object.entries(category).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           body.append(key, value as string | Blob);
         }
       });
-      const res = await fetch(`${BASE_URL}/${id}`, {
+      await apiClient.request(`${BASE_URL}/${id}`, {
         method:"PATCH",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
         body
       });
-      if(!res.ok){
-        const errMsg = await res.text();
-        throw new Error(errMsg || `Erro ao criar o artigo ${id}`);
-      }
-      return res.json();
     }
 }

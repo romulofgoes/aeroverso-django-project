@@ -11,22 +11,11 @@ export default function CreateCategory() {
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
     console.log('Categoria cadastrada:', { tipo, descricao_meta: descricaoMeta })
-    const token = localStorage.getItem('access_token')
     const formData = {
       'tipo': tipo,
       'descricao_meta': descricaoMeta
     }
-    try {
-      await categoryService.postCategory(formData, token || "a")
-    } catch(err) {
-        const tokenRef = localStorage.getItem('refresh_token')
-        if(tokenRef) { 
-          const newToken = (await tokenService.getNewToken(tokenRef)).access || "a" 
-          await categoryService.postCategory(formData, newToken)
-        }
-        else throw new Error ("Não foi possível achar o refresh token no localStorage")
-      console.log(e || "Provavelmente token expirou")
-    }
+    await categoryService.postCategory(formData)
     console.log('Dados do autor:', formData)
     setTipo('')
     setDescricaoMeta('')

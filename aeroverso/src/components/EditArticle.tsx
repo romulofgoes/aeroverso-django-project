@@ -60,18 +60,10 @@ export default function CreateArticle({
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
     setStatus('saving')
-    const token = localStorage.getItem('access_token')
     const { imagem_capa, ...rest } = formData
     const patchData: PatchArticle = imagem_capa ? formData : rest
     try {
-      try {
-        await articleService.updateArticle(String(article.id), patchData, token || "a")
-      } catch(err) {
-        const tokenRef = localStorage.getItem('refresh_token')
-        if(!tokenRef) throw new Error("Não foi possível achar o refresh token no localStorage")
-        const newToken = (await tokenService.getNewToken(tokenRef)).access || "a"
-        await articleService.updateArticle(String(article.id), patchData, newToken)
-      }
+      await articleService.updateArticle(String(article.id), patchData)
       router.push('/admin/management/dashboard/articles/edit')
     } catch(err) {
       console.log(err || "Não foi possível salvar as alterações")

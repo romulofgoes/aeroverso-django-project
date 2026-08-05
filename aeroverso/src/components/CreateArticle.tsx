@@ -53,18 +53,7 @@ export default function CreateArticle({
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
-    const token = localStorage.getItem('access_token')
-    try {
-      await articleService.postArticle(formData, token || "a")
-    } catch(err) {
-        const tokenRef = localStorage.getItem('refresh_token')
-        if(tokenRef) { 
-          const newToken = (await tokenService.getNewToken(tokenRef)).access || "a" 
-          await articleService.postArticle(formData, newToken)
-        }
-        else throw new Error ("Não foi possível achar o refresh token no localStorage")
-      console.log(e || "Provavelmente token expirou")
-    }
+    await articleService.postArticle(formData)
     console.log('Dados do artigo:', formData)
   }
 

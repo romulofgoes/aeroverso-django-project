@@ -11,22 +11,12 @@ export default function CreateAuthor() {
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
     console.log('Autor cadastrado:', { nome, profissao })
-    const token = localStorage.getItem('access_token')
     const formData = {
       'nome': nome,
       'profissao': profissao
     }
-    try {
-      await authorService.postAuthor(formData, token || "a")
-    } catch(err) {
-        const tokenRef = localStorage.getItem('refresh_token')
-        if(tokenRef) { 
-          const newToken = (await tokenService.getNewToken(tokenRef)).access || "a" 
-          await authorService.postAuthor(formData, newToken)
-        }
-        else throw new Error ("Não foi possível achar o refresh token no localStorage")
-      console.log("Provavelmente token expirou")
-    }
+    await authorService.postAuthor(formData)
+    console.log("Provavelmente token expirou")
     console.log('Dados do autor:', formData)
     setNome('')
     setProfissao('')

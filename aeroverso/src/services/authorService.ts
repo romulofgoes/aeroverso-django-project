@@ -1,3 +1,4 @@
+import { apiClient } from '@/lib/apiClient'
 import { Author, AuthorRequestDTO, DjangoList, PatchAuthor } from '@/types/index'
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/authors`
@@ -13,44 +14,26 @@ export const authorService = {
     if (!res.ok) throw new Error(`Erro ao buscar autor com id=${id}`)
     return res.json()
   },
-  postAuthor: async (newAuthor:AuthorRequestDTO, token:string): Promise<Author> => {
+  postAuthor: async (newAuthor:AuthorRequestDTO)=> {
     const body = new FormData()
     body.append('nome', newAuthor.nome)
     body.append('profissao', newAuthor.profissao)
-    const res = await fetch(`${BASE_URL}`,{
-
+    const res = await apiClient.request(`${BASE_URL}`,{
       method:"POST",
-      headers: {
-        'Authorization':`Bearer ${token}`
-      },
       body
-    }
-    )
-    if(!res.ok){
-     const errMsg = await res.text();
-      throw new Error(errMsg || `Erro ao criar o autor ${newAuthor.nome}`);
-    }
-    return res.json();
+    });
   }
 ,
-updateAuthor: async (id: string, token:string, author:PatchAuthor): Promise<Author> => {
+updateAuthor: async (id: string, author:PatchAuthor)=> {
     const body = new FormData();
     Object.entries(author).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         body.append(key, value as string | Blob);
       }
     });
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const res = await apiClient.request(`${BASE_URL}/${id}`, {
       method:"PATCH",
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
       body
     });
-    if(!res.ok){
-      const errMsg = await res.text();
-      throw new Error(errMsg || `Erro ao criar o artigo ${id}`);
-    }
-    return res.json();
   }
 }

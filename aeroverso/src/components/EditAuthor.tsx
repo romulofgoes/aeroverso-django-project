@@ -18,14 +18,7 @@ export default function EditAuthor({ author }: { author: Author }) {
     const token = localStorage.getItem('access_token')
     const patchData: PatchAuthor = { nome, profissao }
     try {
-      try {
-        await authorService.updateAuthor(String(author.id), token || "a", patchData)
-      } catch (err) {
-        const tokenRef = localStorage.getItem('refresh_token')
-        if (!tokenRef) throw new Error("Não foi possível achar o refresh token no localStorage")
-        const newToken = (await tokenService.getNewToken(tokenRef)).access || "a"
-        await authorService.updateAuthor(String(author.id), newToken, patchData)
-      }
+      await authorService.updateAuthor(String(author.id), patchData)
       router.push('/admin/management/dashboard/authors/edit')
     } catch (err) {
       console.log(err || "Não foi possível salvar as alterações")
