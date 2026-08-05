@@ -44,7 +44,7 @@ export default function CreateAuthor() {
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             placeholder="Ex: Maria da Silva"
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            className="w-full px-4 py-2 bg-gray-50 border text-gray-700 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
           />
         </div>
 
@@ -63,7 +63,7 @@ export default function CreateAuthor() {
             value={profissao}
             onChange={(e) => setProfissao(e.target.value)}
             placeholder="Ex: Jornalista de Tecnologia"
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
           />
         </div>
 
