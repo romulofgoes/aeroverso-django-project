@@ -1,15 +1,16 @@
 'use client'
 
-import CreateAuthor from '@/components/CreateAuthor'
-import CreateCategory from '@/components/CreateCategory'
-import CreateArticle from '@/components/CreateArticle'
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 import { tokenService } from '@/services/tokenService'
 
-
 export default function LoginPage() {
+    const [error, setError] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
+        setError('')
+        setIsSubmitting(true)
         // FIX: read straight from the DOM instead of React state — autofill
         // doesn't fire onChange, so controlled state can end up empty.
         const data = new FormData(e.currentTarget as HTMLFormElement)
@@ -21,42 +22,63 @@ export default function LoginPage() {
             const refreshToken = res.refresh;
             localStorage.setItem('access_token', token);
             localStorage.setItem('refresh_token', refreshToken);
-            console.log(token);
-            console.log(refreshToken);
             window.location.href = '/admin/management/dashboard';
-        } catch(e) {
-            console.log(e || 'Credenciais inválidas')
+        } catch {
+            setError('Usuário ou senha inválidos.')
+            setIsSubmitting(false)
         }
-    };  
-  return (
-    <main className="min-h-screen bg-navy-950 py-10 px-4">
-        <div className="max-w-5xl mx-auto mb-8">
-            <h1 className="text-3xl font-extrabold mb-8 text-center">
-                Painel de Login
-            </h1>
-            <form onSubmit={handleSubmit} >
-                <h2>Admin Portal</h2>
-                <label htmlFor="username">Username</label>
-                <input
-                    id="username"
-                    name="username"
-                    className="bg-gray-50"
-                    type="text"
-                    required
-                />
+    };
+    return (
+        <main className="min-h-screen bg-navy-950 flex items-center justify-center py-10 px-4">
+            <div className="w-full max-w-sm">
+                <h1 className="text-2xl font-bold text-white text-center mb-6">
+                    Painel de Administração
+                </h1>
+                <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                    <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-2">
+                        Entrar
+                    </h2>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                                Usuário
+                            </label>
+                            <input
+                                id="username"
+                                name="username"
+                                type="text"
+                                required
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                            />
+                        </div>
 
-                <label htmlFor="password">Password</label>
-                <input
-                    id="password"
-                    name="password"
-                    className="bg-gray-50"
-                    type="password"
-                    required
-                />
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                                Senha
+                            </label>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                required
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                            />
+                        </div>
 
-                <button type="submit">Submit</button>
-            </form>
-      </div>
-    </main>
-  )
+                        {error && (
+                            <p className="text-sm text-red-600">{error}</p>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium rounded-lg shadow-sm transition-all"
+                        >
+                            {isSubmitting ? 'Entrando...' : 'Entrar'}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    )
 }
