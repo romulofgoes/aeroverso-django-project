@@ -16,7 +16,7 @@ export default function CreateCategory() {
       'descricao_meta': descricaoMeta
     }
     await categoryService.postCategory(formData)
-    console.log('Dados do autor:', formData)
+    window.location.href = '/admin/management/dashboard'
     setTipo('')
     setDescricaoMeta('')
   }

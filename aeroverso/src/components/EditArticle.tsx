@@ -69,6 +69,7 @@ export default function CreateArticle({
       console.log(err || "Não foi possível salvar as alterações")
       setStatus('error')
     }
+    window.location.href = '/admin/management/dashboard' 
   }
 
   return (

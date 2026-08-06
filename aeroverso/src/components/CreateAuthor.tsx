@@ -16,8 +16,7 @@ export default function CreateAuthor() {
       'profissao': profissao
     }
     await authorService.postAuthor(formData)
-    console.log("Provavelmente token expirou")
-    console.log('Dados do autor:', formData)
+    window.location.href = '/admin/management/dashboard'
     setNome('')
     setProfissao('')
   }

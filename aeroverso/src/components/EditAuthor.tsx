@@ -24,6 +24,7 @@ export default function EditAuthor({ author }: { author: Author }) {
       console.log(err || "Não foi possível salvar as alterações")
       setStatus('error')
     }
+    window.location.href = '/admin/management/dashboard'
   }
 
   return (

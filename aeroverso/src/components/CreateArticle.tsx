@@ -54,7 +54,7 @@ export default function CreateArticle({
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
     await articleService.postArticle(formData)
-    console.log('Dados do artigo:', formData)
+    window.location.href = '/admin/management/dashboard'
   }
 
   return (

@@ -24,6 +24,7 @@ export default function EditCategory({ category }: { category: Category }) {
       console.log(err || "Não foi possível salvar as alterações")
       setStatus('error')
     }
+    window.location.href = '/admin/management/dashboard'
   }
 
   return (
