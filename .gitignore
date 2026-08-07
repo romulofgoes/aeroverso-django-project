@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 relatorio_prontidao_deploy.txt
 backend/catalog
+backend/media
