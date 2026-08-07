@@ -161,4 +161,4 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://aeroverso.com.br']
+CSRF_TRUSTED_ORIGINS = [config('ALLOWED_HOSTS', default='').split(',')] # sugestão do claude para domínio HTTPS para Django não bloquear login
