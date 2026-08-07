@@ -26,9 +26,16 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
+# Segurança — só ativa quando DEBUG=False (produção)
+#SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+# CSRF_COOKIE_SECURE = not DEBUG
+# SECURE_HSTS_SECONDS = 60 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
 
 
-ALLOWED_HOSTS = [config('ALLOWED_HOSTS', default='').split(',')]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
 
 
 # Application definition
@@ -157,8 +164,9 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",      # Typical React/Vue/Next.js dev server
-    "http://127.0.0.1:3000",
+    "https://localhost:3000",      # Typical React/Vue/Next.js dev server
+    "https://127.0.0.1:3000",
+    "http://localhost:3000"
 ]
 
-CSRF_TRUSTED_ORIGINS = [config('ALLOWED_HOSTS', default='').split(',')] # sugestão do claude para domínio HTTPS para Django não bloquear login
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='').split(',') # sugestão do claude para domínio HTTPS para Django não bloquear login
