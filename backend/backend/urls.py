@@ -26,7 +26,6 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 urlpatterns = [
     path("api/", include("articles.urls")),
-    path("artigos/", include("articles.urls")),
     path("admin/", admin.site.urls),
     path("api/token/", TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path("api/token/refresh/", CustomTokenRefreshView.as_view(), name='token_refresh'),
