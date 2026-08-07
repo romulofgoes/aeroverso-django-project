@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [config('ALLOWED_HOSTS', default='').split(',')]
 
 
 # Application definition
@@ -139,6 +139,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+# endereço para servidor servir arquivos estáticos do backend
+STATIC_ROOT = BASE_DIR / 'catalog'
 
 # caminho de imagens colocadas no artigo
 
@@ -158,3 +160,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",      # Typical React/Vue/Next.js dev server
     "http://127.0.0.1:3000",
 ]
+
+CSRF_TRUSTED_ORIGINS = ['https://aeroverso.com.br']
