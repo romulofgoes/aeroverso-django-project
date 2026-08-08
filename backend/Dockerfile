@@ -27,3 +27,4 @@ EXPOSE 8000
 # 2) a sintaxe original CMD ["python manage.py runserver"] estava incorreta
 #    de qualquer forma — em modo "exec", cada argumento precisa ser um
 #    item separado da lista, não uma
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
