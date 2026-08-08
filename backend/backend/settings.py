@@ -163,10 +163,6 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=7),
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost:3000",      # Typical React/Vue/Next.js dev server
-    "https://127.0.0.1:3000",
-    "http://localhost:3000"
-]
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='').split(',')
 
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='').split(',') # sugestão do claude para domínio HTTPS para Django não bloquear login
