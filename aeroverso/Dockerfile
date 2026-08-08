@@ -4,6 +4,12 @@ FROM node:24-slim AS builder
 
 WORKDIR /aeroverso/
 
+# Recebe o build arg do compose e disponibiliza como variável de ambiente
+# durante o "npm run build" — sem isso, NEXT_PUBLIC_API_URL fica undefined
+# no código já compilado, mesmo que você configure certo no runtime depois
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 # Copia só os manifestos de dependência primeiro, aproveitando
 # cache de camada do Docker em rebuilds futuros
 COPY package.json package-lock.json ./
