@@ -2,7 +2,31 @@ import { Space_Grotesk, Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import './globals.css'
+import type { Metadata } from 'next'
 
+export const metadata: Metadata = {
+  title: 'Aeroverso — Notícias, curiosidades e carreira na aviação',
+  description: 'Portal de notícias, curiosidades e carreira no mundo da aviação, com foco na América Latina.',
+  icons: {
+    icon: '/favicon.ico',
+  },
+  openGraph: {
+    title: 'Aeroverso',
+    description: 'Portal de notícias, curiosidades e carreira no mundo da aviação.',
+    url: 'https://aeroverso.com.br',
+    siteName: 'Aeroverso',
+    images: [
+      {
+        url: 'https://aeroverso.com.br/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Aeroverso',
+      },
+    ],
+    locale: 'pt_BR',
+    type: 'website',
+  },
+}
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space-grotesk',
