@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Aeroverso',
   description: 'Portal de notícias, curiosidades e carreira no mundo da aviação, com foco na América Latina.',
   icons: {
-    icon: '/favicon_32px.ico',
+    icon: '/favicon.ico',
   },
   openGraph: {
     title: 'Aeroverso',
