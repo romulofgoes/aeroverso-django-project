@@ -5,10 +5,10 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Aeroverso — Notícias, curiosidades e carreira na aviação',
+  title: 'Aeroverso',
   description: 'Portal de notícias, curiosidades e carreira no mundo da aviação, com foco na América Latina.',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/favicon_32px.ico',
   },
   openGraph: {
     title: 'Aeroverso',
