@@ -1,6 +1,36 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { articleService } from '@/services/articleService'
+import type { Metadata } from 'next'
+
+
+type Props = { params: Promise<{ id: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params
+  const article = await articleService.getArticle(Number(id))
+
+  return {
+    title: article.titulo,
+    description: article.descricao_meta,
+    openGraph: {
+      title: article.titulo,
+      description: article.descricao_meta,
+      url: `https://aeroverso.com.br/articles/${article.id}`,
+      siteName: 'Aeroverso',
+      images: [
+        {
+          url: article.imagem_capa || 'https://aeroverso.com.br/og-image.jpg',
+          width: 1200,
+          height: 630,
+          alt: article.titulo,
+        },
+      ],
+      locale: 'pt_BR',
+      type: 'article',
+    },
+  }
+}
 
 export default async function Page(
   { params }: { params: Promise<{ id: string }> }
