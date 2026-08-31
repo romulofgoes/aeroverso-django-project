@@ -37,6 +37,34 @@ likely has the same bug — you can't reach the endpoint that gives you your
 first token without already being authenticated. Check this before relying
 on login via the API.
 
+## `Article.conteudo` (QuillField) needs the `{delta, html}` JSON envelope, not plain text
+
+`conteudo = QuillField()` on `Article` (must be instantiated — `conteudo = QuillField` without
+`()` silently stops being a real model field, with no error until something tries to use it).
+`QuillField` subclasses `TextField` and stores one thing: a JSON string
+`{"delta": "<json-encoded Quill Delta ops>", "html": "<rendered HTML>"}` — exactly what
+`django_quill`'s own admin/form JS widget produces (see
+`django_quill/static/django_quill/django_quill.js`). **Any write — via the ORM directly or via the
+API — that sets `conteudo` to plain text or malformed JSON raises `QuillParseError` at save time**
+(`django_quill.fields.FieldQuill._get_quill` → `Quill(json_string)`), not at validation time. Use
+the `quill_conteudo()` helper in `articles/tests/test_API.py` to build a valid envelope in tests
+instead of a bare string.
+
+DRF's `ModelSerializer` has no built-in mapping for `QuillField`, so with `fields = "__all__"` it
+falls back (via MRO lookup against `TextField`) to a plain `CharField`. That means:
+- **Write** (POST/PATCH): works as a normal string field — the frontend just needs to send the
+  envelope JSON string described above as the value of `conteudo`.
+- **Read** (GET), *without* the fix below: `CharField.to_representation` calls `str(value)` on the
+  `FieldQuill` instance, whose `__str__` returns only `.delta` (not `.html`, not the full
+  envelope) — an easy-to-miss asymmetry between what you POST and what GET returns.
+
+`ArticleSerializer.to_representation` (in `articles/serializers.py`) now overrides this: it
+re-encodes `conteudo` as the same `{delta, html}` envelope on the way out, wrapped in a
+`try/except QuillParseError` (falls back to an empty envelope) so legacy/malformed rows don't
+500 the endpoint. Keep read and write symmetric if you touch this field again — the frontend
+(`aeroverso/src/components/QuillEditor.tsx`, see `aeroverso/AGENTS.md`) round-trips the exact
+envelope string it's given.
+
 ## `time_machine.travel()` needs a UTC-aware datetime, not local `now()`
 
 `datetime.datetime.now()` returns naive *local* time. `time_machine.travel()`

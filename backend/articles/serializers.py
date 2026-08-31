@@ -1,4 +1,6 @@
+import json
 from rest_framework import serializers
+from django_quill.quill import QuillParseError
 from .models import Category, Author, Article, ArticleImage
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -34,4 +36,14 @@ class ArticleSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['categoria'] = CategorySerializer(instance.categoria).data
         representation['autor'] = AuthorSerializer(instance.autor).data
+        # QuillField is unknown to DRF's field mapping, so it falls back to a
+        # plain CharField (str(FieldQuill) == only the delta). Return the same
+        # {delta, html} envelope the frontend posts, so GET/POST stay symmetric.
+        try:
+            representation['conteudo'] = json.dumps({
+                'delta': instance.conteudo.delta,
+                'html': instance.conteudo.html,
+            })
+        except QuillParseError:
+            representation['conteudo'] = json.dumps({'delta': '', 'html': ''})
         return representation

@@ -5,6 +5,7 @@ import { categoryService } from '@/services/categoryService'
 import { tokenService } from '@/services/tokenService'
 import { ArticleRequestDTO, Author, Category } from '@/types/index'
 import { useState } from 'react'
+import QuillEditor from '@/components/QuillEditor'
 
 interface AuthorOption {
   id: number
@@ -218,15 +219,10 @@ export default function CreateArticle({
           <label htmlFor="conteudo" className="block text-sm font-medium text-gray-700 mb-1">
             Conteúdo do Artigo *
           </label>
-          <textarea
-            id="conteudo"
-            name="conteudo"
-            rows={10}
-            required
+          <QuillEditor
             value={formData.conteudo}
-            onChange={handleChange}
+            onChange={(conteudo) => setFormData((prev) => ({ ...prev, conteudo }))}
             placeholder="Escreva seu artigo aqui..."
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
           />
         </div>
 

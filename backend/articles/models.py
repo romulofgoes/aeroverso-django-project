@@ -1,4 +1,5 @@
 from django.db import models
+from django_quill.fields import QuillField
 
 class Category(models.Model):
     tipo = models.CharField(max_length=50)
@@ -21,7 +22,7 @@ class Article(models.Model):
     titulo = models.CharField(max_length=60) # length definition based on: https://zyppy.com/title-tags/meta-title-tag-length/
     subtitulo = models.CharField(max_length=120) # also useful source for subheading and overall structure: https://espirian.co.uk/headline-subheading-meta/
     descricao_meta = models.CharField(max_length=160)
-    conteudo = models.TextField()
+    conteudo = QuillField(default='')
     data = models.DateTimeField("date published")
     imagem_capa = models.ImageField(blank=True, null=True, upload_to='images/')
     categoria = models.ForeignKey(Category, on_delete=models.PROTECT)

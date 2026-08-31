@@ -6,6 +6,15 @@ import type { Metadata } from 'next'
 
 type Props = { params: Promise<{ id: string }> }
 
+// conteudo vem como envelope JSON {"delta": ..., "html": ...} do django-quill-editor
+function conteudoHtml(conteudo: string): string {
+  try {
+    return JSON.parse(conteudo).html ?? conteudo
+  } catch {
+    return conteudo
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
   const article = await articleService.getArticle(Number(id))
@@ -82,9 +91,10 @@ export default async function Page(
 
 
         {/* Corpo do texto — fonte de leitura (Inter), espaçamento generoso entre linhas */}
-        <div className="font-body text-base sm:text-lg leading-relaxed text-slate-200 whitespace-pre-line">
-            {article.conteudo}
-        </div>
+        <div
+            className="font-body text-base sm:text-lg leading-relaxed text-slate-200"
+            dangerouslySetInnerHTML={{ __html: conteudoHtml(article.conteudo) }}
+        />
 
     </article>
   )

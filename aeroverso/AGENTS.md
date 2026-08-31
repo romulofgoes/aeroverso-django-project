@@ -8,6 +8,23 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 The `<body>` in `src/app/layout.tsx` sets `text-slate-100` (near-white) globally for the dark theme. Any form rendered on a light (`bg-white`/`bg-gray-50`) card — e.g. `CreateAuthor.tsx`, `EditAuthor.tsx` — must set an explicit text color (`text-gray-700` or similar) on its `<input>`/`<textarea>` elements, otherwise the typed text inherits the light body color and becomes unreadable against the light background.
 
+# `Article.conteudo` is a Quill envelope string, not plain text/HTML
+
+`CreateArticle.tsx` and `EditArticle.tsx` edit `conteudo` with `<QuillEditor>`
+(`src/components/QuillEditor.tsx`), a thin wrapper around the vanilla `quill` npm package (not
+`react-quill`) chosen to mirror `django-quill-editor`'s own JS widget exactly. `formData.conteudo`
+is always a JSON string shaped `{"delta": "<json>", "html": "<html>"}` — never plain text and never
+raw HTML on its own. This has to match what the Django backend expects; see the "QuillField needs
+the `{delta, html}` JSON envelope" section in `backend/AGENTS.md` for the full contract (backend
+raises `QuillParseError` on save if it gets anything else).
+
+`QuillEditor` is deliberately uncontrolled after mount (the `value` prop only seeds initial
+content once, via `quill.setContents(JSON.parse(parsed.delta))`) — re-applying `value` on every
+render would fight the user's cursor. Any page reading `conteudo` for display (e.g.
+`src/app/articles/[id]/page.tsx`) must `JSON.parse` it and use the `.html` key with
+`dangerouslySetInnerHTML` — rendering the raw string directly shows the JSON envelope, not the
+article text.
+
 # Dashboard chrome lives in the layout, not in individual pages
 
 `src/app/admin/management/dashboard/layout.tsx` renders a persistent top bar (a "← Painel" link and a "Sair" button) around every page under `dashboard/`, in addition to its auth guard. New pages added under `dashboard/` inherit this bar automatically — don't add your own back-navigation or logout control inside a page component, extend the layout instead.

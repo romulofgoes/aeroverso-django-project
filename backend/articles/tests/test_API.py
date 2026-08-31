@@ -1,5 +1,6 @@
 import base64
 import datetime
+import json
 import time_machine
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -7,6 +8,11 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
 from articles.models import Article, Author, Category
+
+def quill_conteudo(texto):
+    """QuillField só aceita o envelope JSON {delta, html} — ver backend/AGENTS.md."""
+    return json.dumps({'delta': json.dumps([{'insert': texto + '\n'}]), 'html': f'<p>{texto}</p>'})
+
 class ArticleAPITests(APITestCase):
     @classmethod
     def setUpTestData(cls):
@@ -42,7 +48,7 @@ class ArticleAPITests(APITestCase):
             titulo='Artigo mais antigo',
             subtitulo='Subtítulo do artigo mais antigo',
             descricao_meta='Descrição meta do artigo mais antigo',
-            conteudo='Conteúdo de teste do artigo mais antigo.',
+            conteudo=quill_conteudo('Conteúdo de teste do artigo mais antigo.'),
             data=datetime.datetime(2026, 1, 1, 10, 0),
             categoria=cls.categoria,
         )
@@ -51,7 +57,7 @@ class ArticleAPITests(APITestCase):
             titulo='Artigo mais recente',
             subtitulo='Subtítulo do artigo mais recente',
             descricao_meta='Descrição meta do artigo mais recente',
-            conteudo='Conteúdo de teste do artigo mais recente.',
+            conteudo=quill_conteudo('Conteúdo de teste do artigo mais recente.'),
             data=datetime.datetime(2026, 6, 1, 10, 0),
             categoria=cls.outra_categoria,
         )
@@ -60,7 +66,7 @@ class ArticleAPITests(APITestCase):
             titulo='Artigo mais recente ainda',
             subtitulo='Subtítulo do artigo mais recente ainda',
             descricao_meta='Descrição meta do artigo mais recente ainda',
-            conteudo='Conteúdo de teste do artigo mais recente ainda.',
+            conteudo=quill_conteudo('Conteúdo de teste do artigo mais recente ainda.'),
             data=datetime.datetime.now(),
             categoria=cls.categoria,
         )
@@ -71,7 +77,7 @@ class ArticleAPITests(APITestCase):
         self.author = Author.objects.create(nome='Fulano de Tal', profissao='Comissario')
         self.article = Article.objects.create(
             titulo='Artigo teste', subtitulo='...', descricao_meta='...',
-            conteudo='...', data='2026-01-01T10:00:00Z',
+            conteudo=quill_conteudo('...'), data='2026-01-01T10:00:00Z',
             categoria=self.category, autor=self.author,
         )
 
@@ -116,7 +122,7 @@ class ArticleAPITests(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.post('/api/articles', {
             'titulo': 'Novo artigo', 'subtitulo': '...', 'descricao_meta': '...',
-            'conteudo': '...', 'data': '2026-01-01T10:00:00Z',
+            'conteudo': quill_conteudo('...'), 'data': '2026-01-01T10:00:00Z',
             'categoria': self.category.id, 'autor': self.author.id,
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -152,7 +158,7 @@ class ArticleAPITests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer  {token}")
         response = self.client.post('/api/articles', {
             'titulo': 'Novo artigo', 'subtitulo': '...', 'descricao_meta': '...',
-            'conteudo': '...', 'data': '2026-01-01T10:00:00Z',
+            'conteudo': quill_conteudo('...'), 'data': '2026-01-01T10:00:00Z',
             'categoria': self.category.id, 'autor': self.author.id,
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -165,7 +171,7 @@ class ArticleAPITests(APITestCase):
             self.client.credentials(HTTP_AUTHORIZATION=f"Bearer  {token}")
             response = self.client.post('/api/articles', {
                 'titulo': 'Novo artigo', 'subtitulo': '...', 'descricao_meta': '...',
-                'conteudo': '...', 'data': '2026-01-01T10:00:00Z',
+                'conteudo': quill_conteudo('...'), 'data': '2026-01-01T10:00:00Z',
                 'categoria': self.category.id, 'autor': self.author.id,
             })
             self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -182,7 +188,7 @@ class ArticleAPITests(APITestCase):
             self.client.credentials(HTTP_AUTHORIZATION=f"Bearer  {refreshed_token}")
             response = self.client.post('/api/articles', {
                 'titulo': 'Novo artigo', 'subtitulo': '...', 'descricao_meta': '...',
-                'conteudo': '...', 'data': '2026-01-01T10:00:00Z',
+                'conteudo': quill_conteudo('...'), 'data': '2026-01-01T10:00:00Z',
                 'categoria': self.category.id, 'autor': self.author.id,
             })
             self.assertEqual(response.status_code, status.HTTP_201_CREATED) 
