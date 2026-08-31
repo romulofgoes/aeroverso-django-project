@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { articleService } from '@/services/articleService'
+import ArticleEmbeds from '@/components/ArticleEmbeds'
 import type { Metadata } from 'next'
 
 
@@ -47,6 +48,7 @@ export default async function Page(
   const resolvedParams = await params
   const id = Number(resolvedParams.id)
   const article = await articleService.getArticle(id)
+  const html = conteudoHtml(article.conteudo)
 
   return (
     // max-w-3xl: limita a largura do texto pra ficar confortável de ler (linhas não muito longas)
@@ -93,8 +95,9 @@ export default async function Page(
         {/* Corpo do texto — fonte de leitura (Inter), espaçamento generoso entre linhas */}
         <div
             className="font-body text-base sm:text-lg leading-relaxed text-slate-200"
-            dangerouslySetInnerHTML={{ __html: conteudoHtml(article.conteudo) }}
+            dangerouslySetInnerHTML={{ __html: html }}
         />
+        <ArticleEmbeds html={html} />
 
     </article>
   )
