@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from django_quill.fields import QuillField
 
 class Category(models.Model):
@@ -24,7 +23,7 @@ class Article(models.Model):
     subtitulo = models.CharField(max_length=120) # also useful source for subheading and overall structure: https://espirian.co.uk/headline-subheading-meta/
     descricao_meta = models.CharField(max_length=160)
     conteudo = QuillField(default='')
-    data_publicacao = models.DateTimeField("data de primeira publicação", default=timezone.now)
+    data_publicacao = models.DateTimeField("data de primeira publicação", auto_now_add=True)
     imagem_capa = models.ImageField(blank=True, null=True, upload_to='images/')
     categoria = models.ForeignKey(Category, on_delete=models.PROTECT)
 
