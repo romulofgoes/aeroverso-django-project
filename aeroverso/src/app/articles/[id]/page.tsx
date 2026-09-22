@@ -76,9 +76,17 @@ export default async function Page(
                 {article.autor.nome}
             </Link>
             <span aria-hidden="true">•</span>
-            <time dateTime={article.data}>
-                {new Date(article.data).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
+            <time dateTime={article.data_publicacao}>
+                Publicado em {new Date(article.data_publicacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
             </time>
+            {article.ultima_atualizacao !== article.data_publicacao && (
+                <>
+                    <span aria-hidden="true">•</span>
+                    <time dateTime={article.ultima_atualizacao}>
+                        Atualizado em {new Date(article.ultima_atualizacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                    </time>
+                </>
+            )}
         </div>
             {/* Imagem de capa — aspect-video mantém proporção 16:9 responsiva */}
         <div className="relative w-full aspect-video mb-10 rounded-lg overflow-hidden border border-navy-700">

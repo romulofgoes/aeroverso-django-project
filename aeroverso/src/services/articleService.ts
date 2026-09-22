@@ -33,7 +33,6 @@ export const articleService = {
     body.append('categoria', dto.categoria)
     body.append('conteudo', dto.conteudo)
     body.append('autor', dto.autor)
-    body.append('data', dto.data)
     if(dto.imagem_capa) body.append('imagem_capa', dto.imagem_capa)
     await apiClient.request(`${BASE_URL}`, {
       method: "POST", 
