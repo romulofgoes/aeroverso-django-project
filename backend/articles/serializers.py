@@ -25,10 +25,12 @@ class ArticleSerializer(serializers.ModelSerializer):
     autor = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all())
     imagem_capa = serializers.ImageField(required=False)
     imagens = ArticleImageSerializer(many=True, read_only=True)
+    ultima_atualizacao = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = Article
         fields = "__all__"
+        read_only_fields = ('data_publicacao',)
 
     # FIX: ...while GET responses still return the full nested Category/Author
     # objects, since ArticleCard/CategoryLink/article detail page expect that shape.

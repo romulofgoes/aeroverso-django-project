@@ -49,7 +49,7 @@ class ArticleAPITests(APITestCase):
             subtitulo='Subtítulo do artigo mais antigo',
             descricao_meta='Descrição meta do artigo mais antigo',
             conteudo=quill_conteudo('Conteúdo de teste do artigo mais antigo.'),
-            data=datetime.datetime(2026, 1, 1, 10, 0),
+            data_publicacao=datetime.datetime(2026, 1, 1, 10, 0),
             categoria=cls.categoria,
         )
         cls.article_recente = Article.objects.create(
@@ -58,7 +58,7 @@ class ArticleAPITests(APITestCase):
             subtitulo='Subtítulo do artigo mais recente',
             descricao_meta='Descrição meta do artigo mais recente',
             conteudo=quill_conteudo('Conteúdo de teste do artigo mais recente.'),
-            data=datetime.datetime(2026, 6, 1, 10, 0),
+            data_publicacao=datetime.datetime(2026, 6, 1, 10, 0),
             categoria=cls.outra_categoria,
         )
         cls.article_mais_recente = Article.objects.create(
@@ -67,7 +67,7 @@ class ArticleAPITests(APITestCase):
             subtitulo='Subtítulo do artigo mais recente ainda',
             descricao_meta='Descrição meta do artigo mais recente ainda',
             conteudo=quill_conteudo('Conteúdo de teste do artigo mais recente ainda.'),
-            data=datetime.datetime.now(),
+            data_publicacao=datetime.datetime.now(),
             categoria=cls.categoria,
         )
         
@@ -77,7 +77,7 @@ class ArticleAPITests(APITestCase):
         self.author = Author.objects.create(nome='Fulano de Tal', profissao='Comissario')
         self.article = Article.objects.create(
             titulo='Artigo teste', subtitulo='...', descricao_meta='...',
-            conteudo=quill_conteudo('...'), data='2026-01-01T10:00:00Z',
+            conteudo=quill_conteudo('...'), data_publicacao='2026-01-01T10:00:00Z',
             categoria=self.category, autor=self.author,
         )
 

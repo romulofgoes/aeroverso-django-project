@@ -82,39 +82,12 @@ future_date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
 
 ## Article versioning: `data_publicacao` (immutable) + `ArticleUpdate` history
 
-**Schema change 2026-09-22** (Claude Haiku 4.5): Articles now track first-publish date and update history.
+**Schema change 2026-09-22** (Claude Haiku 4.5 / Claude Sonnet 5): Articles track first-publish date and update history.
 
-- `Article.data_publicacao`: auto-set on creation, read-only in admin. Never editable.
+- `Article.data_publicacao`: `DateTimeField(default=timezone.now)` — auto-filled at creation (admin form and API POST alike) but not `auto_now_add`, so it stays a normal writable field at the DB level. Existing rows were backfilled from the old `data` field by migration `0015_article_versioning.py` (no data loss). Treat it as immutable by convention only: admin exposes it read-only (`ArticleAdmin.readonly_fields`) and the serializer marks it `read_only_fields`, but nothing enforces this at the model level — a direct `.save()` can still change it.
 - `Article.ultima_atualizacao` (property): computed from latest `ArticleUpdate` record, or `data_publicacao` if no updates yet.
-- `ArticleUpdate` model (new): one row per update. Auto-created trigger (via middleware or signal, see below) whenever article is saved.
-- Frontend displays: "Publicado em {data_publicacao}" + "Atualizado em {ultima_atualizacao}" (only if updated).
+- `ArticleUpdate` model: one row per update, `data` is `auto_now_add`. Auto-created by the `post_save` signal in `articles/signals.py` (wired via `ArticlesConfig.ready()` in `articles/apps.py`) whenever an existing `Article` is saved — fires on every save except the first (`created=True` is skipped).
+- `ArticleSerializer` (`articles/serializers.py`) exposes `data_publicacao` (`read_only_fields`) and `ultima_atualizacao` (declared explicitly, since it's a property not a model field — `fields = "__all__"` alone wouldn't pick it up).
+- Frontend should display: "Publicado em {data_publicacao}" + "Atualizado em {ultima_atualizacao}" (only if different from `data_publicacao`).
 
-**⚠️ Migration needed:** Rename existing `Article.data` → `data_publicacao` and create `ArticleUpdate` table. The admin displays both inline (read-only updates tab) and via the main edit form's "Última Atualização" read-only field.
-
-**How to trigger ArticleUpdate creation:** Currently manual. To auto-create on every admin/API save, add a `post_save` signal to Article (see below). Without a signal, updates are recorded only if manually added via the admin's inline form.
-
-Example signal (add to `articles/signals.py`):
-```python
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from .models import Article, ArticleUpdate
-
-@receiver(post_save, sender=Article)
-def create_update_record(sender, instance, created, **kwargs):
-    if not created:  # skip on creation (data_publicacao is already set)
-        ArticleUpdate.objects.create(artigo=instance)
-```
-
-Then wire in `articles/apps.py`:
-```python
-from django.apps import AppConfig
-
-class ArticlesConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'articles'
-    
-    def ready(self):
-        import articles.signals
-```
-
-**Serializer impact:** Update `ArticleSerializer` to expose both fields (tests in `articles/tests/test_API.py`). The API read already includes them; API write should not allow edits to `data_publicacao` or `ultima_atualizacao` (mark as `read_only_fields`).
+**Gotcha:** the signal fires on *every* save of an existing article, including saves that don't change any user-visible content (e.g. a script that re-saves all articles). If that becomes noisy, compare `update_fields` or a dirty-field check before creating the `ArticleUpdate` row.
