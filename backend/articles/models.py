@@ -24,7 +24,7 @@ class Article(models.Model):
     subtitulo = models.CharField(max_length=120) # also useful source for subheading and overall structure: https://espirian.co.uk/headline-subheading-meta/
     descricao_meta = models.CharField(max_length=160)
     conteudo = QuillField(default='')
-    data_publicacao = models.DateTimeField("data de primeira publicação", auto_now_add=True)
+    data_publicacao = models.DateTimeField("data de primeira publicação")
     imagem_capa = models.ImageField(blank=True, null=True, upload_to='images/')
     categoria = models.ForeignKey(Category, on_delete=models.PROTECT)
 
