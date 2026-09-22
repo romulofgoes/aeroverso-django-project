@@ -79,3 +79,42 @@ target as tz-aware:
 ```python
 future_date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=15)
 ```
+
+## Article versioning: `data_publicacao` (immutable) + `ArticleUpdate` history
+
+**Schema change 2026-09-22** (Claude Haiku 4.5): Articles now track first-publish date and update history.
+
+- `Article.data_publicacao`: auto-set on creation, read-only in admin. Never editable.
+- `Article.ultima_atualizacao` (property): computed from latest `ArticleUpdate` record, or `data_publicacao` if no updates yet.
+- `ArticleUpdate` model (new): one row per update. Auto-created trigger (via middleware or signal, see below) whenever article is saved.
+- Frontend displays: "Publicado em {data_publicacao}" + "Atualizado em {ultima_atualizacao}" (only if updated).
+
+**⚠️ Migration needed:** Rename existing `Article.data` → `data_publicacao` and create `ArticleUpdate` table. The admin displays both inline (read-only updates tab) and via the main edit form's "Última Atualização" read-only field.
+
+**How to trigger ArticleUpdate creation:** Currently manual. To auto-create on every admin/API save, add a `post_save` signal to Article (see below). Without a signal, updates are recorded only if manually added via the admin's inline form.
+
+Example signal (add to `articles/signals.py`):
+```python
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import Article, ArticleUpdate
+
+@receiver(post_save, sender=Article)
+def create_update_record(sender, instance, created, **kwargs):
+    if not created:  # skip on creation (data_publicacao is already set)
+        ArticleUpdate.objects.create(artigo=instance)
+```
+
+Then wire in `articles/apps.py`:
+```python
+from django.apps import AppConfig
+
+class ArticlesConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'articles'
+    
+    def ready(self):
+        import articles.signals
+```
+
+**Serializer impact:** Update `ArticleSerializer` to expose both fields (tests in `articles/tests/test_API.py`). The API read already includes them; API write should not allow edits to `data_publicacao` or `ultima_atualizacao` (mark as `read_only_fields`).
