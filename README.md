@@ -68,6 +68,7 @@ A proposta editorial é misturar três frentes: **notícias** do setor aéreo, *
 - **Camada de serviço no frontend** (`services/`) isolada de UI — cada entidade (artigo, autor, categoria, token) tem seu próprio service, sem misturar lógica de HTTP com componentes.
 - **`apiClient` central**: toda chamada autenticada passa por um client HTTP único, responsável por detectar token expirado (401), renovar automaticamente via refresh token, e repetir a requisição original — de forma transparente para o resto da aplicação.
 - **Três containers independentes** (Postgres, backend Django/Gunicorn, frontend Next.js) orquestrados via Docker Compose, comunicando-se por rede interna — o Nginx roda fora do Docker, direto na VM, servindo arquivos de mídia/estáticos de um volume compartilhado e roteando o restante do tráfego para os containers certos.
+- **CI/CD com GitHub Actions** fazendo deploy automático a cada push
 
 ---
 
@@ -168,7 +169,7 @@ NEXT_PUBLIC_API_URL=https://aeroverso.com.br/api
 
 ## Créditos de conteúdo
 
-Imagens de artigos usadas como exemplo são provenientes do Wikimedia Commons, sob licença Creative Commons (CC BY-SA), com crédito ao fotógrafo original indicado em cada artigo. Textos de exemplo gerados com apoio do Claude (Anthropic) são explicitamente identificados como tal no próprio conteúdo do artigo.
+Imagens de artigos usadas são provenientes do Wikimedia Commons, Unsplash e outros sites com imagens sob licença Creative Commons (CC BY-SA), com créditos, quando requisitado pela licença, ao fotógrafo original indicado em cada artigo. Textos gerados com apoio do Claude (Anthropic) são explicitamente identificados como tal no próprio conteúdo do artigo.
 
 ---
 
@@ -189,7 +190,7 @@ Todas as decisões finais de arquitetura, modelagem de dados e lógica de negóc
 - [ ] Migrar armazenamento de mídia para object storage em nuvem (Google Cloud Storage), em vez de disco local
 - [ ] Rate limiting no endpoint de login
 - [ ] Invalidação real de token no logout (`token_blacklist` do simplejwt)
-- [ ] CI/CD com GitHub Actions (deploy automático a cada push)
+
 
 ---
 
