@@ -76,9 +76,12 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
+            set -e
             cd ~/aeroverso-django-project
             git pull
-            docker compose pull
-            docker compose up -d
+            docker image prune -f
+            docker compose pull backend frontend
+            docker compose up -d --remove-orphans
             docker compose exec -T backend python manage.py migrate --noinput
             docker compose exec -T backend python manage.py collectstatic --noinput
+            docker image prune -f
