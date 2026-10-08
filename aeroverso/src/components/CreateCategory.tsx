@@ -40,7 +40,7 @@ export default function CreateCategory() {
             value={tipo}
             onChange={(e) => setTipo(e.target.value)}
             placeholder="Ex: Tecnologia, Esportes"
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
           />
         </div>
 
@@ -59,7 +59,7 @@ export default function CreateCategory() {
             value={descricaoMeta}
             onChange={(e) => setDescricaoMeta(e.target.value)}
             placeholder="Descrição resumida para mecanismos de busca"
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
           />
         </div>
 
