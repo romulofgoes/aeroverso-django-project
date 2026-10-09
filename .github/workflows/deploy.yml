@@ -78,7 +78,8 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@v1
+      - name: Atualiza a VM
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
@@ -93,3 +94,7 @@ jobs:
             docker compose exec -T backend python manage.py migrate --noinput
             docker compose exec -T backend python manage.py collectstatic --noinput
             docker image prune -f
+      - name: Verifica se o site responde
+        run: |
+          curl -fsS --retry 10 --retry-delay 5 --retry-connrefused https://aeroverso.com.br/api/articles > /dev/null
+          curl -fsSI --retry 5 --retry-delay 5 https://aeroverso.com.br > /dev/null
