@@ -57,12 +57,16 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/romulofgoes/aeroverso-backend:latest
+          tags: |
+            ghcr.io/romulofgoes/aeroverso-backend:latest
+            ghcr.io/romulofgoes/aeroverso-backend:${{ github.sha }}
       - uses: docker/build-push-action@v6
         with:
           context: ./aeroverso
           push: true
-          tags: ghcr.io/romulofgoes/aeroverso-frontend:latest
+          tags: |
+            ghcr.io/romulofgoes/aeroverso-frontend:latest
+            ghcr.io/romulofgoes/aeroverso-frontend:${{ github.sha }}
           build-args: |
             NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
 
