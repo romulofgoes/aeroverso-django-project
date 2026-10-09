@@ -10,7 +10,7 @@ services:
 
   backend:
     build: ./backend
-    image: ghcr.io/romulofgoes/aeroverso-backend:latest
+    image: ghcr.io/romulofgoes/aeroverso-backend:${IMAGE_TAG:-latest}
     volumes:
       - ./media:/backend/media          # imagens de artigo, compartilhadas com o Nginx no host
       - ./catalog:/backend/catalog  # saída do collectstatic, idem
@@ -35,7 +35,7 @@ services:
       context: ./aeroverso
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-    image: ghcr.io/romulofgoes/aeroverso-frontend:latest
+    image: ghcr.io/romulofgoes/aeroverso-frontend:${IMAGE_TAG:-latest}
     ports:
       - "3000:3000"
     depends_on:
