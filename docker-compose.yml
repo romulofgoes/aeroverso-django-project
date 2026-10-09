@@ -1,4 +1,4 @@
-logging:
+x-logging: &default-logging
   driver: json-file
   options:
     max-size: "10m"
