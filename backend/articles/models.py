@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 from django_quill.fields import QuillField
 
 class Category(models.Model):
@@ -20,6 +21,9 @@ class Article(models.Model):
         ordering = ['-data_publicacao']  # artigos mais recentes primeiro, sempre
     autor = models.ForeignKey(Author, on_delete=models.PROTECT)
     titulo = models.CharField(max_length=60) # length definition based on: https://zyppy.com/title-tags/meta-title-tag-length/
+    # gerado automaticamente a partir de 'titulo' em save() - fica fixo depois de criado,
+    # mesmo se 'titulo' mudar, pra não quebrar links já publicados/indexados
+    slug = models.SlugField(max_length=90, unique=True, blank=True, default='')
     subtitulo = models.CharField(max_length=120) # also useful source for subheading and overall structure: https://espirian.co.uk/headline-subheading-meta/
     descricao_meta = models.CharField(max_length=160)
     conteudo = QuillField(default='')
@@ -34,6 +38,17 @@ class Article(models.Model):
 
     def __str__(self):
             return self.titulo
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.titulo)[:80]
+            slug = base_slug
+            suffix = 1
+            while Article.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                suffix += 1
+                slug = f"{base_slug}-{suffix}"
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 class ArticleUpdate(models.Model):
     class Meta:

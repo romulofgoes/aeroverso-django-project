@@ -30,7 +30,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = "__all__"
-        read_only_fields = ('data_publicacao',)
+        read_only_fields = ('data_publicacao', 'slug')
 
     # FIX: ...while GET responses still return the full nested Category/Author
     # objects, since ArticleCard/CategoryLink/article detail page expect that shape.

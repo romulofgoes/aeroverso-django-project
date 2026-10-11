@@ -5,7 +5,7 @@ import ArticleEmbeds from '@/components/ArticleEmbeds'
 import type { Metadata } from 'next'
 
 
-type Props = { params: Promise<{ id: string }> }
+type Props = { params: Promise<{ slug: string }> }
 
 // conteudo vem como envelope JSON {"delta": ..., "html": ...} do django-quill-editor
 function conteudoHtml(conteudo: string): string {
@@ -17,8 +17,8 @@ function conteudoHtml(conteudo: string): string {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params
-  const article = await articleService.getArticle(Number(id))
+  const { slug } = await params
+  const article = await articleService.getArticle(slug)
 
   return {
     title: article.titulo,
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: article.titulo,
       description: article.descricao_meta,
-      url: `https://aeroverso.com.br/articles/${article.id}`,
+      url: `https://aeroverso.com.br/articles/${article.slug}`,
       siteName: 'Aeroverso',
       images: [
         {
@@ -43,11 +43,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Page(
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const resolvedParams = await params
-  const id = Number(resolvedParams.id)
-  const article = await articleService.getArticle(id)
+  const { slug } = await params
+  const article = await articleService.getArticle(slug)
   const html = conteudoHtml(article.conteudo)
 
   return (

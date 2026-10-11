@@ -19,9 +19,11 @@ export const articleService = {
     return res.json()
   },
 
-  getArticle: async (id: number): Promise<Article> => {
-    const res = await fetch(`${BASE_URL}/${id}`, { cache: 'no-store' })
-    if (!res.ok) throw new Error(`Erro ao buscar o artigo com id=${id}`)
+  // aceita tanto o slug (links públicos) quanto o id numérico (links antigos/admin) -
+  // a API resolve os dois na mesma rota, ver ArticleViewSet.get_object no backend
+  getArticle: async (slugOrId: string | number): Promise<Article> => {
+    const res = await fetch(`${BASE_URL}/${slugOrId}`, { cache: 'no-store' })
+    if (!res.ok) throw new Error(`Erro ao buscar o artigo "${slugOrId}"`)
     return res.json()
   },
 
