@@ -40,6 +40,7 @@ export interface ArticleRequestDTO extends ArticleBase {
 // Resposta do GET — categoria e autor vêm como objetos completos
 export interface Article extends ArticleBase {
   id: number
+  slug: string
   categoria: Category
   autor: Author
   categorias_relacionadas?: Category[]

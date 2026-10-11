@@ -6,7 +6,7 @@ import CategoryLink from './CategoryLink'
 export default function FeaturedArticle({ article }: { article: Article }) {
   return (
     <div className="mb-12">
-      <Link href={`/articles/${article.id}`} className="block group">
+      <Link href={`/articles/${article.slug}`} className="block group">
         <div className="relative w-full aspect-21/9 rounded-lg overflow-hidden mb-4">
           <Image
             src={article.imagem_capa || '/file.svg'}
@@ -18,7 +18,7 @@ export default function FeaturedArticle({ article }: { article: Article }) {
         </div>
       </Link>
       <CategoryLink category={article.categoria} />
-      <Link href={`/articles/${article.id}`}>
+      <Link href={`/articles/${article.slug}`}>
         <h1 className="font-display text-3xl sm:text-4xl font-bold mt-2 leading-tight hover:text-cyan-glow transition-colors">
           {article.titulo}
         </h1>

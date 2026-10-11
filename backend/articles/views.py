@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
 from .models import Article, Category, Author
 from .serializers import *
@@ -19,6 +20,18 @@ class ArticleViewSet(PublicReadViewSet):
         if autor_id:
             queryset = queryset.filter(autor_id=autor_id)
         return queryset
+
+    # Aceita tanto o slug (links públicos, ex: /articles/como-pousar-um-aviao) quanto o
+    # id numérico (links/integrações antigas, ex: /articles/42) na mesma rota.
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        lookup = self.kwargs[self.lookup_url_kwarg or self.lookup_field]
+        if lookup.isdigit():
+            obj = get_object_or_404(queryset, pk=lookup)
+        else:
+            obj = get_object_or_404(queryset, slug=lookup)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 class CategoryViewSet(PublicReadViewSet):
     queryset = Category.objects.all()
