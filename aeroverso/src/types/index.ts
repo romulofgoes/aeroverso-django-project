@@ -26,6 +26,7 @@ interface ArticleBase {
   subtitulo: string
   descricao_meta: string
   conteudo: string
+  legenda_imagem: string
 }
 
 // Corpo do POST/PUT — categoria e autor são só o ID (o que o <select> te dá)
@@ -34,7 +35,7 @@ interface ArticleBase {
 export interface ArticleRequestDTO extends ArticleBase {
   categoria: string
   autor: string
-    imagem_capa: File | null
+  imagem_capa: File | null
 }
 
 // Resposta do GET — categoria e autor vêm como objetos completos

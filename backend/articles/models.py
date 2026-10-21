@@ -29,6 +29,7 @@ class Article(models.Model):
     conteudo = QuillField(default='')
     data_publicacao = models.DateTimeField("data de primeira publicação", auto_now_add=True)
     imagem_capa = models.ImageField(blank=True, null=True, upload_to='images/')
+    legenda_imagem = models.CharField(max_length=90, blank=True, default='')
     categoria = models.ForeignKey(Category, on_delete=models.PROTECT)
 
     @property

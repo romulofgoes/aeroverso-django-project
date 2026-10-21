@@ -14,6 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             router.replace('/admin/management')
             return
         }
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setAuthorized(true)
     }, [router])
     

@@ -87,17 +87,24 @@ export default async function Page(
                 </>
             )}
         </div>
-            {/* Imagem de capa — aspect-video mantém proporção 16:9 responsiva */}
-        <div className="relative w-full aspect-video mb-10 rounded-lg overflow-hidden border border-navy-700">
-            <Image
-            src={article.imagem_capa || "/file.svg"}
-            alt={article.titulo}
-            fill
-            className="object-cover"
-            priority
-            />
-        </div>
 
+        {/* Imagem de capa — aspect-video mantém proporção 16:9 responsiva */}
+        <figure className="mb-10">
+            <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-navy-700">
+                <Image
+                src={article.imagem_capa || "/file.svg"}
+                alt={article.legenda_imagem || article.titulo}
+                fill
+                className="object-cover"
+                priority
+                />
+            </div>
+            {article.legenda_imagem && (
+                <figcaption className="text-sm text-slate-400 text-center mt-2">
+                    {article.legenda_imagem}
+                </figcaption>
+            )}
+        </figure>
 
         {/* Corpo do texto — fonte de leitura (Inter), espaçamento generoso entre linhas */}
         <div
