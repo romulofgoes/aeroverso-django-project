@@ -131,7 +131,7 @@ export default function CreateArticle({
             required
             value={formData.titulo}
             onChange={handleChange}
-            placeholder="Ex: Guia Completo sobre SEO em 2026"
+            placeholder="Ex: [Companhia/Órgão] [verbo] [fato principal] [quando/onde]"
             className="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
           />
         </div>
@@ -154,7 +154,7 @@ export default function CreateArticle({
             required
             value={formData.subtitulo}
             onChange={handleChange}
-            placeholder="Uma breve introdução ao assunto do artigo"
+            placeholder="Linha fina com o dado complementar"
             className="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
           />
         </div>
@@ -219,11 +219,21 @@ export default function CreateArticle({
           <label htmlFor="conteudo" className="block text-sm font-medium text-gray-700 mb-1">
             Conteúdo do Artigo *
           </label>
-          <QuillEditor
-            value={formData.conteudo}
-            onChange={(conteudo) => setFormData((prev) => ({ ...prev, conteudo }))}
-            placeholder="Escreva seu artigo aqui..."
-          />
+          <div className="[&_.ql-editor]:min-h-48 [&_.ql-editor]:text-base">
+            <div id="editor">
+              <QuillEditor
+                value={formData.conteudo}
+                onChange={(conteudo) => setFormData((prev) => ({ ...prev, conteudo }))}
+                placeholder=".
+                  Lide: [Quem] [fez o quê], [quando], [onde], [motivo em uma oração].
+                  Parágrafo 2: Detalhes técnicos (aeronave, rota, frequência, números).
+                  Parágrafo 3: Declaração de fonte identificada.
+                  Parágrafo 4: Contexto e histórico (por que importa).
+                  Parágrafo 5 (opcional): Próximos passos ou o que esperar.
+                  Fonte: [comunicado/veículo + link]"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Botão Submit */}
