@@ -41,6 +41,7 @@ export default function CreateArticle({
     conteudo: article.conteudo,
     categoria: String(article.categoria.id),
     imagem_capa: null,
+    legenda_imagem: String(article.legenda_imagem),
   })
 
   const handleChange = (
@@ -230,6 +231,21 @@ export default function CreateArticle({
               accept="image/jpeg,image/png,image/gif"
               onChange={handleImageChange}
               className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+            />
+          </div>
+          <div>
+            <label htmlFor="legenda_imagem" className="block text-sm font-medium text-gray-700 mb-1">
+              Legenda da Imagem (Opcional)
+            </label>
+            <input
+              type="text"
+              id="legenda_imagem"
+              name="legenda_imagem"
+              maxLength={90}
+              value={formData.legenda_imagem}
+              onChange={handleChange}
+              placeholder="Ex: Foto: Divulgação/Boeing"
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
             />
           </div>
         </div>
